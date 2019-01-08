@@ -16,10 +16,12 @@ jobs:
           command: wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
       - run:
           name: Create Heroku app
-          command: heroku create $MOCK_APP_DOMAIN
+          command: heroku create --region=eu --json $MOCK_APP_DOMAIN >> heroku_create.json
       - run:
           name: Login to registry
-          command: echo $HEROKU_API_KEY | docker login -u _ --password-stdin registry.heroku.com
+          command: heroku container:login
       - run:
           name: Push image to Heroku
-          command: heroku container:push web --app $MOCK_APP_DOMAIN
+          command: |
+            cd $GITHUB_ARCHIVE_ROOT_DIR
+            heroku container:push web
