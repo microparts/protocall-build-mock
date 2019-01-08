@@ -24,4 +24,4 @@ jobs:
           name: Push image to Heroku
           command: |
             cd $GITHUB_ARCHIVE_ROOT_DIR
-            heroku container:push web
+            heroku container:push web --app $MOCK_APP_DOMAIN
