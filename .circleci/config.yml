@@ -7,11 +7,10 @@ jobs:
           name: Download mock-app from Bucket to build it
           command: wget -O app.zip $DOWNLOAD_APP_URI
       - run:
-          name: Unzip archive
-          command: unzip app.zip $GITHUB_ARCHIVE_ROOT_DIR ./
-      - run:
           name: Build docker image
-          command: docker build -t protocall/$MOCK_APP_NAME:latest .
+          command: |
+            unzip app.zip && cd $GITHUB_ARCHIVE_ROOT_DIR
+            docker build -t protocall/$MOCK_APP_NAME:latest .
       - run:
           name: Install Heroku client
           command: wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
