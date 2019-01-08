@@ -32,6 +32,6 @@ jobs:
       - run:
           name: Touch app
           command: |
-            A=$(cat heroku_create.json | jq .web_url)
-            python -c "import urllib2; import os; print(urllib2.urlopen(os.environ['A'], timeout=30).read())" | jq .
+            export URL=$(cat heroku_create.json | jq .web_url)
+            python -c "import urllib2; import os; print urllib2.urlopen(os.environ['URL'], timeout=30).read();" | jq .
 
