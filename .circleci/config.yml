@@ -3,8 +3,6 @@ jobs:
   build:
     machine: true
     steps:
-      - setup_remote_docker:
-          docker_layer_caching: true
       - run:
           name: Download mock-app from Bucket to build it
           command: wget -qO- $DOWNLOAD_APP_URI
