@@ -1,0 +1,25 @@
+version: 2
+jobs:
+  build:
+    machine: true
+    steps:
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Download mock-app from Bucket to build it
+          command: wget -qO- $DOWNLOAD_APP_URI
+      - run:
+          name: Build docker image
+          command: docker build -t protocall/$MOCK_APP_NAME:latest .
+      - run:
+          name: Install Heroku client
+          command: wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
+      - run:
+          name: Install Heroku plugins
+          command: heroku plugins:install heroku-container-registry
+      - run:
+          name: Login to registry
+          command: docker login -e _ -u _ --password=$HEROKU_API_KEY registry.heroku.com
+      - run:
+          name: Push image to Heroku
+          command: heroku container:push web --app $HEROKU_APP_NAME
