@@ -21,8 +21,16 @@ jobs:
       - run:
           name: Deploy to Heroku
           command: |
-            ls -la
             cd $GITHUB_ARCHIVE_ROOT_DIR
             heroku container:push web --app $MOCK_APP_DOMAIN
             heroku container:release web --app $MOCK_APP_DOMAIN
+      - run:
+          name: App info
+          command: |
+            apt-get install jq
+            cat heroku_create.json | jq .
+      - run:
+          name: Touch app
+          command: |
+            curl -m 30 $(cat heroku_create.json | jq .web_url)
 
