@@ -29,9 +29,4 @@ jobs:
           command: |
             sudo apt-get install jq
             cat heroku_create.json | jq .
-      - run:
-          name: Touch app
-          command: |
-            export URL=$(cat heroku_create.json | jq .web_url)
-            python -c "import urllib2; import os; print urllib2.urlopen(os.environ['URL'], timeout=30).read();" | jq .
 
