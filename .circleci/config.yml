@@ -27,7 +27,7 @@ jobs:
       - run:
           name: App info
           command: |
-            apt-get install jq
+            sudo apt-get install jq
             cat heroku_create.json | jq .
       - run:
           name: Touch app
