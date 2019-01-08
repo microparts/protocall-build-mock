@@ -5,10 +5,10 @@ jobs:
     steps:
       - run:
           name: Download mock-app from Bucket to build it
-          command: wget $DOWNLOAD_APP_URI
+          command: wget -O app.zip $DOWNLOAD_APP_URI
       - run:
           name: Unzip archive
-          command: unzip ${MOCK_APP_NAME}.zip $MOCK_APP_NAME ./
+          command: unzip app.zip $MOCK_APP_NAME ./
       - run:
           name: Build docker image
           command: docker build -t protocall/$MOCK_APP_NAME:latest .
