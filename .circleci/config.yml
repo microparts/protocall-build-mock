@@ -32,5 +32,5 @@ jobs:
       - run:
           name: Touch app
           command: |
-            curl -m 30 $(cat heroku_create.json | jq .web_url) | jq .
+            python -c "import urllib2; print(urllib2.urlopen('https://google.com', timeout=30).read())" | jq .
 
