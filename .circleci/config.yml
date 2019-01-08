@@ -27,10 +27,11 @@ jobs:
       - run:
           name: App info
           command: |
-            sudo apt-get install jq libssl
+            sudo apt-get install jq
             cat heroku_create.json | jq .
       - run:
           name: Touch app
           command: |
-            python -c "import urllib2; print(urllib2.urlopen('https://google.com', timeout=30).read())" | jq .
+            A=$(cat heroku_create.json | jq .web_url)
+            python -c "import urllib2; import os; print(urllib2.urlopen(os.environ['A'], timeout=30).read())" | jq .
 
