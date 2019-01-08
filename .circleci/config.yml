@@ -22,4 +22,4 @@ jobs:
           command: echo $HEROKU_API_KEY | docker login -u _ --password-stdin registry.heroku.com
       - run:
           name: Push image to Heroku
-          command: heroku container:push web --app $MOCK_APP_DOMAIN
+          command: heroku container:push web --app protocall/$MOCK_APP_NAME:latest
