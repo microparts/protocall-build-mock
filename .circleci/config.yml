@@ -8,7 +8,7 @@ jobs:
           command: wget -O app.zip $DOWNLOAD_APP_URI
       - run:
           name: Unzip archive
-          command: unzip app.zip $MOCK_APP_NAME ./
+          command: unzip app.zip $GITHUB_ARCHIVE_ROOT_DIR ./
       - run:
           name: Build docker image
           command: docker build -t protocall/$MOCK_APP_NAME:latest .
