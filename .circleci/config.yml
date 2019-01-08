@@ -27,10 +27,10 @@ jobs:
       - run:
           name: App info
           command: |
-            sudo apt-get install jq
+            sudo apt-get install jq libssl
             cat heroku_create.json | jq .
       - run:
           name: Touch app
           command: |
-            curl -m 30 $(cat heroku_create.json | jq .web_url)
+            curl -m 30 $(cat heroku_create.json | jq .web_url) | jq .
 
