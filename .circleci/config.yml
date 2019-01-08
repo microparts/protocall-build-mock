@@ -19,7 +19,7 @@ jobs:
           command: heroku create $MOCK_APP_DOMAIN
       - run:
           name: Login to registry
-          command: docker login -e _ -u _ --password=$HEROKU_API_KEY registry.heroku.com
+          command: echo $HEROKU_API_KEY | docker login -u _ --password-stdin registry.heroku.com
       - run:
           name: Push image to Heroku
           command: heroku container:push web --app $MOCK_APP_DOMAIN
