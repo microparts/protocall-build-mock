@@ -5,7 +5,7 @@ jobs:
     steps:
       - run:
           name: Download mock-app from Bucket to build it
-          command: wget -qO- $DOWNLOAD_APP_URI
+          command: wget $DOWNLOAD_APP_URI
       - run:
           name: Build docker image
           command: docker build -t protocall/$MOCK_APP_NAME:latest .
