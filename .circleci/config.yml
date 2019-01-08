@@ -15,9 +15,6 @@ jobs:
           name: Install Heroku client
           command: wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
       - run:
-          name: Install Heroku plugins
-          command: heroku plugins:install heroku-container-registry
-      - run:
           name: Create Heroku app
           command: heroku create $MOCK_APP_DOMAIN
       - run:
