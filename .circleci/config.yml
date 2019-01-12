@@ -13,7 +13,7 @@ jobs:
             docker build -t $MOCK_APP_DOMAIN .
       - run:
           name: Install flynn
-          command: sudo L=/usr/local/bin/flynn && curl -sSL -A "`uname -sp`" https://dl.flynn.io/cli | zcat >$L && chmod +x $L
+          command: L=/usr/local/bin/flynn && sudo curl -sSL -A "`uname -sp`" https://dl.flynn.io/cli | sudo zcat >$L && sudo chmod +x $L
       - run:
           name: Add cluster
           command: >
