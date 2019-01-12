@@ -26,10 +26,7 @@ jobs:
       - run:
           name: Add cluster
           command: |
-            if ! [[ "$(flynn cluster | grep "${FLYNN_CLUSTER_NAME}")" ]];
-            then
-                flynn cluster add -f --no-git --docker -d -p ${FLYNN_TLS_PIN} ${FLYNN_CLUSTER_NAME} ${FLYNN_CONTROLLER_URL} ${FLYNN_CONTROLLER_KEY} || echo "Cert not found, copy it";
-            fi;
+            flynn cluster add --docker -d -p ${FLYNN_TLS_PIN} ${FLYNN_CLUSTER_NAME} ${FLYNN_CONTROLLER_URL} ${FLYNN_CONTROLLER_KEY} || echo "Cert not found, copy it";
 
             export DOCKER_CA_DIR=/etc/docker/certs.d/docker.${FLYNN_CONTROLLER_URL}
             sudo mkdir -p $DOCKER_CA_DIR
@@ -37,6 +34,8 @@ jobs:
             sudo service docker restart
             flynn docker set-push-url
             flynn docker login
+
+            flynn cluster add --docker -d -p ${FLYNN_TLS_PIN} ${FLYNN_CLUSTER_NAME} ${FLYNN_CONTROLLER_URL} ${FLYNN_CONTROLLER_KEY}
       - run:
           name: Create app
           command: flynn create --remote "" $MOCK_APP_DOMAIN || echo "Okay, app already exists."
