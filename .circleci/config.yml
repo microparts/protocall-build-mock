@@ -20,6 +20,7 @@ jobs:
       - run:
           name: Link docker with flynn
           command: |
+            flynn docker set-push-url
             export DOCKER_CA_DIR=/etc/docker/certs.d/docker.${FLYNN_CONTROLLER_URL}
             sudo mkdir -p $DOCKER_CA_DIR
             sudo cp ~/.flynn/ca-certs/default.pem ${DOCKER_CA_DIR}/ca.crt
