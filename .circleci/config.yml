@@ -17,16 +17,10 @@ jobs:
             sudo curl -sSL -A "`uname -sp`" https://dl.flynn.io/cli | sudo zcat >/tmp/flynn
             sudo chmod +x /tmp/flynn
             sudo mv /tmp/flynn /usr/local/bin/flynn
-#      - run:
-#          name: Link docker with flynn
-#          command: |
-#            export DOCKER_CA_DIR=/etc/docker/certs.d/docker.${FLYNN_CONTROLLER_URL}
-#            sudo mkdir -p $DOCKER_CA_DIR
-#            sudo cp ~/.flynn/ca-certs/default.pem ${DOCKER_CA_DIR}/ca.crt
       - run:
-          name: Add cluster
+          name: Add cluster and link docker with flynn
           command: |
-            flynn cluster add --docker -d -p ${FLYNN_TLS_PIN} ${FLYNN_CLUSTER_NAME} ${FLYNN_CONTROLLER_URL} ${FLYNN_CONTROLLER_KEY} || echo "Cert not found, copy it";
+            flynn cluster add --docker -d -p ${FLYNN_TLS_PIN} ${FLYNN_CLUSTER_NAME} ${FLYNN_CONTROLLER_URL} ${FLYNN_CONTROLLER_KEY} > /dev/null
 
             export DOCKER_CA_DIR=/etc/docker/certs.d/docker.${FLYNN_CONTROLLER_URL}
             sudo mkdir -p $DOCKER_CA_DIR
