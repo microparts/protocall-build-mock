@@ -33,7 +33,6 @@ jobs:
             sudo cp ~/.flynn/ca-certs/default.pem ${DOCKER_CA_DIR}/ca.crt
             sudo service docker restart
             flynn cluster add --docker -d -p ${FLYNN_TLS_PIN} ${FLYNN_CLUSTER_NAME} ${FLYNN_CONTROLLER_URL} ${FLYNN_CONTROLLER_KEY}
-            flynn docker set-push-url
             flynn docker login
       - run:
           name: Create app
