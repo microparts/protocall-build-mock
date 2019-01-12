@@ -14,9 +14,9 @@ jobs:
       - run:
           name: Install flynn
           command: |
-          sudo curl -sSL -A "`uname -sp`" https://dl.flynn.io/cli | sudo zcat >/tmp/flynn
-          sudo chmod +x /tmp/flynn
-          sudo mv /tmp/flynn /usr/local/bin/flynn
+            sudo curl -sSL -A "`uname -sp`" https://dl.flynn.io/cli | sudo zcat >/tmp/flynn
+            sudo chmod +x /tmp/flynn
+            sudo mv /tmp/flynn /usr/local/bin/flynn
       - run:
           name: Add cluster
           command: >
