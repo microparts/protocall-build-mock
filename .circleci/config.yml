@@ -18,13 +18,6 @@ jobs:
             sudo chmod +x /tmp/flynn
             sudo mv /tmp/flynn /usr/local/bin/flynn
       - run:
-          name: Add cluster
-          command: >
-            if ! [[ "$(flynn cluster | grep "${FLYNN_CLUSTER_NAME}")" ]];
-            then
-                flynn cluster add --docker -d -p ${FLYNN_TLS_PIN} ${FLYNN_CLUSTER_NAME} ${FLYNN_CONTROLLER_URL} ${FLYNN_CONTROLLER_KEY};
-            fi
-      - run:
           name: Link docker with flynn
           command: |
             export DOCKER_CA_DIR=/etc/docker/certs.d/docker.${FLYNN_CONTROLLER_URL}
@@ -32,6 +25,13 @@ jobs:
             cp ~/.flynn/ca-certs/default.pem ${DOCKER_CA_DIR}/ca.crt
             flynn docker set-push-url
             flynn docker login
+      - run:
+          name: Add cluster
+          command: >
+            if ! [[ "$(flynn cluster | grep "${FLYNN_CLUSTER_NAME}")" ]];
+            then
+                flynn cluster add --docker -d -p ${FLYNN_TLS_PIN} ${FLYNN_CLUSTER_NAME} ${FLYNN_CONTROLLER_URL} ${FLYNN_CONTROLLER_KEY};
+            fi
       - run:
           name: Create app
           command: flynn create --remote "" $MOCK_APP_DOMAIN || echo "Okay, app already exists."
