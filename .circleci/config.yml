@@ -7,26 +7,53 @@ jobs:
           name: Download mock-app from Bucket to build it
           command: wget -O app.zip $DOWNLOAD_APP_URI
       - run:
-          name: Unzip archive
-          command: unzip app.zip && cd $GITHUB_ARCHIVE_ROOT_DIR
-      - run:
-          name: Install Heroku client
-          command: wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
-      - run:
-          name: Create Heroku app
-          command: heroku create --region=eu --json $MOCK_APP_DOMAIN >> heroku_create.json
-      - run:
-          name: Login to registry
-          command: heroku container:login
-      - run:
-          name: Deploy to Heroku
+          name: Unzip archive & Build Image
           command: |
-            cd $GITHUB_ARCHIVE_ROOT_DIR
-            heroku container:push web --app $MOCK_APP_DOMAIN
-            heroku container:release web --app $MOCK_APP_DOMAIN
+            unzip app.zip && cd $GITHUB_ARCHIVE_ROOT_DIR
+            docker build -t $MOCK_APP_DOMAIN .
       - run:
-          name: App info
+          name: Install flynn
+          command: L=/usr/local/bin/flynn && curl -sSL -A "`uname -sp`" https://dl.flynn.io/cli | zcat >$L && chmod +x $L
+      - run:
+          name: Add cluster
+          command: >
+            if ! [[ "$(flynn cluster | grep "${FLYNN_CLUSTER_NAME}")" ]];
+            then
+                flynn cluster add --docker -d -p ${FLYNN_TLS_PIN} ${FLYNN_CLUSTER_NAME} ${FLYNN_CONTROLLER_URL} ${FLYNN_CONTROLLER_KEY};
+            fi
+      - run:
+          name: Link docker with flynn
           command: |
-            sudo apt-get install jq
-            cat heroku_create.json | jq .
+            flynn docker set-push-url
+            flynn docker login
+      - run:
+          name: Create app
+          command: flynn create --remote "" $MOCK_APP_DOMAIN || echo "Okay, app already exists."
+      - run:
+          name: Push app
+          command: flynn -a $MOCK_APP_DOMAIN -c ${FLYNN_CLUSTER_NAME} docker push $MOCK_APP_DOMAIN
+      - run:
+          name: Scale app
+          command: flynn -a $MOCK_APP_DOMAIN -c ${FLYNN_CLUSTER_NAME} scale app=1
+
+#      - run:
+#          name: Install Heroku client
+#          command: wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
+#      - run:
+#          name: Create Heroku app
+#          command: heroku create --region=eu --json $MOCK_APP_DOMAIN >> heroku_create.json
+#      - run:
+#          name: Login to registry
+#          command: heroku container:login
+#      - run:
+#          name: Deploy to Heroku
+#          command: |
+#            cd $GITHUB_ARCHIVE_ROOT_DIR
+#            heroku container:push web --app $MOCK_APP_DOMAIN
+#            heroku container:release web --app $MOCK_APP_DOMAIN
+#      - run:
+#          name: App info
+#          command: |
+#            sudo apt-get install jq
+#            cat heroku_create.json | jq .
 
