@@ -20,7 +20,7 @@ jobs:
       - run:
           name: Link docker with flynn
           command: |
-            flynn cluster add --docker -d -p pin def domain.com key > /dev/null
+            flynn cluster add --docker -d -p ${FLYNN_TLS_PIN} ${FLYNN_CLUSTER_NAME} ${FLYNN_CONTROLLER_URL} ${FLYNN_CONTROLLER_KEY} > /dev/null
             export DOCKER_CA_DIR=/etc/docker/certs.d/docker.${FLYNN_CONTROLLER_URL}
             sudo mkdir -p $DOCKER_CA_DIR
             sudo cp ~/.flynn/ca-certs/default.pem ${DOCKER_CA_DIR}/ca.crt
