@@ -25,11 +25,11 @@ jobs:
 #            sudo cp ~/.flynn/ca-certs/default.pem ${DOCKER_CA_DIR}/ca.crt
       - run:
           name: Add cluster
-          command: >
+          command: |
             if ! [[ "$(flynn cluster | grep "${FLYNN_CLUSTER_NAME}")" ]];
             then
                 flynn cluster add -f --no-git --docker -d -p ${FLYNN_TLS_PIN} ${FLYNN_CLUSTER_NAME} ${FLYNN_CONTROLLER_URL} ${FLYNN_CONTROLLER_KEY};
-            fi
+            fi;
             export DOCKER_CA_DIR=/etc/docker/certs.d/docker.${FLYNN_CONTROLLER_URL}
             sudo mkdir -p $DOCKER_CA_DIR
             sudo cp ~/.flynn/ca-certs/default.pem ${DOCKER_CA_DIR}/ca.crt
